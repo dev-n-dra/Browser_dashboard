@@ -9,7 +9,7 @@ const coinInput = document.querySelector('.coin-input')
 
 
 // getting the backgroundImage from the Unsplash api
-fetch('https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature')
+fetch('https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=Nature')
     .then(response => response.json())
     .then(data => {
         document.querySelector('body').style.backgroundImage = `url(${data.urls.regular})`
@@ -17,8 +17,8 @@ fetch('https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&que
     })
     .catch(err => {
         // Use a default background image/author
-        document.body.style.backgroundImage = `url(https://images.unsplash.com/photo-1560008511-11c63416e52d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMTEwMjl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjI4NDIxMTc&ixlib=rb-1.2.1&q=80&w=1080)`
-        document.querySelector(".author").textContent = `By: Dodi Achmad`
+        document.body.style.backgroundImage = `url("https://images.unsplash.com/photo-1597600159211-d6c104f408d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDI0NzB8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjcwNzQzODk&ixlib=rb-1.2.1&q=80&w=1080")`
+        document.querySelector(".author").textContent = `By: Michael Dziedzic`
     })
 
 // getting the location using geolocation and then using the lat and long form that data to obtain the temperature of the current city using openWeatherMap API
