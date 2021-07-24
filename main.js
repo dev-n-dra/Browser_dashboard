@@ -6,20 +6,21 @@ const addCard = document.querySelector('.add-card')
 const addCardBtn = document.querySelector('.add-card-btn')
 const coinInput = document.querySelector('.coin-input')
 
-
-
 // getting the backgroundImage from the Unsplash api
-fetch('https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=Nature')
-    .then(response => response.json())
-    .then(data => {
-        document.querySelector('body').style.backgroundImage = `url(${data.urls.regular})`
-        document.querySelector('.author').textContent = `By : ${data.user.name}`
-    })
-    .catch(err => {
-        // Use a default background image/author
-        document.body.style.backgroundImage = `url("https://images.unsplash.com/photo-1597600159211-d6c104f408d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDI0NzB8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjcwNzQzODk&ixlib=rb-1.2.1&q=80&w=1080")`
-        document.querySelector(".author").textContent = `By: Michael Dziedzic`
-    })
+function background(filter) {
+    fetch(`https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=${filter}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('body').style.backgroundImage = `url(${data.urls.regular})`
+            document.querySelector('.author').textContent = `By : ${data.user.name}`
+        })
+        .catch(err => {
+            // Use a default background image/author
+            document.body.style.backgroundImage = `url("https://images.unsplash.com/photo-1597600159211-d6c104f408d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDI0NzB8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjcwNzQzODk&ixlib=rb-1.2.1&q=80&w=1080")`
+            document.querySelector(".author").textContent = `By: Michael Dziedzic`
+        })
+}
+background('Nature')
 
 // getting the location using geolocation and then using the lat and long form that data to obtain the temperature of the current city using openWeatherMap API
 navigator.geolocation.getCurrentPosition(
@@ -55,15 +56,26 @@ function currentTime() {
 }
 setInterval(currentTime, 1000)
 
-// adding the crypto card and accessing the crypto data using coingecko API
-let coinArray = ['dogecoin', 'bitcoin', 'ethereum']
-if (coinArray.length > 2) {
-    addCard.style.display = "none"
-}
 
+// adding the crypto card and accessing the crypto data using coingecko API
+
+
+// 1st check for the array of coin in local storage
+let coinArray = JSON.parse(localStorage.getItem("coinArray"))
+
+// if the coin array exist then we proceed further but in case the array does not exist then create an empty array
+if (!coinArray) {
+    let emptyArray = []
+    localStorage.setItem("coinArray", JSON.stringify(emptyArray))
+}
+coinArray = JSON.parse(localStorage.getItem("coinArray"))
+
+
+// a function to display the content of the array
 function displayCards() {
+    // coinArray = JSON.parse(localStorage.getItem("coinArray"))
     for (let element of coinArray) {
-        fetch(`https://api.coingecko.com/api/v3/coins/${element}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`)
+        fetch(`https://api.coingecko.com/api/v3/coins/${element.toLowerCase()}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`)
             .then(res => {
                 if (!res.ok) {
                     throw Error("Coin data not available")
@@ -72,52 +84,68 @@ function displayCards() {
             })
             .then(data => {
                 coinCards.innerHTML += `
-                <div class="card","${element}">
-                    <img src=${data.image.large} alt="" />
-                    <div class="card-info">
-                        <h3 class="coin-name">${data.name}</h3>
-                        <p class="coin-value">${data.market_data.current_price.usd} usd</p>
-                        <div class="change">
-                            <div class="percentage-change">${data.market_data.price_change_percentage_24h_in_currency.usd}%</div>
-                            <p>% change in 24 hours</p>
+                    <div class="card","${element}">
+                        <img src=${data.image.large} alt="" />
+                        <div class="card-info">
+                            <h3 class="coin-name">${data.name}</h3>
+                            <p class="coin-value">${data.market_data.current_price.usd} usd</p>
+                            <div class="change">
+                                <div class="percentage-change">${data.market_data.price_change_percentage_24h_in_currency.usd}%</div>
+                                <p>% change in 24 hours</p>
+                            </div>
                         </div>
+                        <div class="delete-card-btn">-</div>
                     </div>
-                    <div class="delete-card-btn">-</div>
-                </div>
-            `
+                `
                 let deleteCardBtn = document.querySelectorAll('.delete-card-btn')
                 deleteCardBtn.forEach(element => {
-                    element.addEventListener('click', () => {
+                    element.addEventListener('click', function deleteCard() {
                         value = element.parentElement.children[1].children[0].textContent
                         value = value.toLowerCase()
                         coinArray = coinArray.filter(item => item !== value)
+                        localStorage.clear()
+                        localStorage.setItem("coinArray", JSON.stringify(coinArray))
                         console.log(coinArray)
                         element.parentElement.remove()
                         addCard.style.display = "flex"
                     })
                 })
+
             })
             .catch(err => {
                 console.log(err)
                 addCard.style.display = "flex"
                 coinArray.pop()
+                localStorage.clear()
+                localStorage.setItem("coinArray", JSON.stringify(coinArray))
                 console.log(coinArray)
             })
 
-    }
-}
-
-displayCards()
-addCardBtn.addEventListener('click', () => {
-    if (coinInput.value) {
-        coinArray.push(coinInput.value.toLowerCase())
-        coinInput.value = ''
-        coinCards.innerHTML = ''
-        displayCards()
         if (coinArray.length > 2) {
             addCard.style.display = "none"
         } else {
             addCard.style.display = "flex"
         }
+    }
+
+}
+
+
+// now it is time to create a function to add coins in the array
+function addCoin() {
+    if (coinInput.value) {
+        coinArray.push(coinInput.value.toLowerCase())
+        localStorage.setItem("coinArray", JSON.stringify(coinArray))
+        coinInput.value = ''
+        coinCards.innerHTML = ''
+        displayCards()
+    }
+}
+
+displayCards()
+addCardBtn.addEventListener('click', addCoin)
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        addCoin()
     }
 })
