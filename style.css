@@ -58,7 +58,7 @@ main {
 }
 
 
-/* styling of middle section---------------------- */
+/* styling of middle section---------------------------------------- */
 
 .center {
     height: 65%;
@@ -66,6 +66,9 @@ main {
     display: flex;
     justify-content: space-between;
 }
+
+
+/* styling the .crypto-cards------------ */
 
 .crypto-cards {
     width: 320px;
@@ -102,7 +105,9 @@ main {
 }
 
 .percentage-change {
-    background: rgba(255, 255, 255, 0.5);
+    color: black;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     padding: 2px 5px;
     margin-right: 5px;
@@ -178,7 +183,10 @@ main {
 }
 
 
-/* styling of bottom section */
+/* styling the links----------------------------------- */
+
+
+/* styling of bottom section------------------------------------------*/
 
 .bottom {
     height: 10%;
