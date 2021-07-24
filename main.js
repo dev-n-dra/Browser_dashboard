@@ -110,7 +110,7 @@ function displayCards() {
 displayCards()
 addCardBtn.addEventListener('click', () => {
     if (coinInput.value) {
-        coinArray.push(coinInput.value)
+        coinArray.push(coinInput.value.toLowerCase())
         coinInput.value = ''
         coinCards.innerHTML = ''
         displayCards()
