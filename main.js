@@ -73,7 +73,7 @@ let coinArray = JSON.parse(localStorage.getItem("coinArray"))
 
 // if the coin array exist then we proceed further but in case the array does not exist then create an empty array
 if (!coinArray) {
-    let emptyArray = []
+    let emptyArray = ['bitcoin', 'ethereum']
     localStorage.setItem("coinArray", JSON.stringify(emptyArray))
 }
 coinArray = JSON.parse(localStorage.getItem("coinArray"))
@@ -165,7 +165,7 @@ let linkArray = JSON.parse(localStorage.getItem("linkArray"))
 
 // if the link array exist then we proceed further but in case the array does not exist then create an empty array
 if (!linkArray) {
-    let emptyArray = []
+    let emptyArray = [{ title: "facebook", url: 'facebook.com' }, { title: "linked in", url: 'linkedin.com' }, { title: 'instagram', url: 'instagram.com' }]
     localStorage.setItem("linkArray", JSON.stringify(emptyArray))
 }
 linkArray = JSON.parse(localStorage.getItem("linkArray"))
