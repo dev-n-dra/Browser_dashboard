@@ -2,6 +2,7 @@
 const weatherDisplay = document.querySelector('.weather')
 const timeDisplay = document.querySelector('.time')
 const coinCards = document.querySelector('.coin-cards')
+const addCardContainer = document.querySelector('.add-card-container')
 const addCard = document.querySelector('.add-card')
 const linkCards = document.querySelector('.link-cards')
 const addLinkBtn = document.querySelector('.add-link-btn')
@@ -185,9 +186,9 @@ function displayLinks() {
         `
     }
     if (linkArray.length > 5) {
-        addLinkBtn.style.display = "none"
+        addCardContainer.style.display = "none"
     } else {
-        addLinkBtn.style.display = "grid"
+        addCardContainer.style.display = "block"
     }
 }
 
@@ -236,7 +237,7 @@ function deleteLink() {
             linkArray = linkArray.filter(item => item.title !== value)
             localStorage.setItem("linkArray", JSON.stringify(linkArray))
             element.parentElement.remove()
-            addLinkBtn.style.display = "grid"
+            addCardContainer.style.display = "block"
         })
     })
 }
