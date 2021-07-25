@@ -17,8 +17,8 @@ h3 {
 }
 
 main {
-    height: 100vh;
-    min-height: 700px;
+    min-height: 100vh;
+    /* min-height: 600px; */
     display: flex;
     flex-direction: column;
 }
@@ -27,7 +27,7 @@ main {
 /* styling of top section------------------------ */
 
 .top {
-    height: 25%;
+    flex-grow: 2;
     display: flex;
     padding: 0 2em 2em;
     justify-content: space-between;
@@ -51,9 +51,9 @@ main {
 }
 
 .time {
-    font-size: 4rem;
+    font-size: 4.5rem;
     font-weight: 700;
-    margin-right: 0.5em;
+    margin-right: 0.2em;
     text-shadow: 0 0 2px black;
 }
 
@@ -61,10 +61,11 @@ main {
 /* styling of middle section---------------------------------------- */
 
 .center {
-    height: 65%;
+    flex-grow: 7;
     padding: 0 2em;
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 
@@ -80,7 +81,7 @@ main {
     border-radius: 20px;
     margin-bottom: 20px;
     background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     padding: 1em;
@@ -185,11 +186,155 @@ main {
 
 /* styling the links----------------------------------- */
 
+.links {
+    display: flex;
+}
+
+.link-cards {
+    max-width: 500px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.link-card {
+    text-align: center;
+    margin: 0 10px 20px 10px;
+    position: relative;
+}
+
+.link-card:hover .delete-link-btn {
+    display: block;
+}
+
+.link-box {
+    width: 60px;
+    aspect-ratio: 1/1;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    border-radius: 15px;
+    display: grid;
+    place-content: center;
+    margin-bottom: 2px;
+    font-size: 3em;
+    cursor: pointer;
+}
+
+.link-box img {
+    width: 24px;
+    aspect-ratio: 1/1;
+}
+
+
+/* .link-box img {
+    width: 30px;
+    aspect-ratio: 1/1;
+} */
+
+.link-info {
+    font-size: 0.8em;
+    text-shadow: 0 0 10px black;
+    text-transform: capitalize;
+}
+
+.add-link-btn {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    border-radius: 15px;
+    display: grid;
+    place-content: center;
+    margin: 0 10px 20px 10px;
+    font-size: 2em;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+
+.delete-link-btn {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #ccc;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    color: black;
+    cursor: pointer;
+    display: none;
+    line-height: 1em;
+}
+
+.add-link {
+    z-index: 2;
+    width: 300px;
+    /* height: 300px; */
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3em 1.5em 2em;
+    display: none;
+}
+
+#link-title,
+#link-url {
+    padding: 0.5em;
+    border-radius: 10px;
+    border: none;
+    margin: 0.2em 0px 0.5em;
+}
+
+.description {
+    font-size: 0.8em;
+    font-weight: 400;
+}
+
+.cancel {
+    text-align: center;
+    margin-top: 1em;
+    cursor: pointer;
+    display: inline;
+}
+
+.add-btn {
+    background-color: rgb(109, 109, 109);
+    color: white;
+    padding: 0.2em;
+    border-radius: 10px;
+    border: none;
+    margin: 1em 0 0.5em;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+input:focus,
+input:hover,
+.add-btn:hover,
+.add-btn:focus,
+.add-card-btn:focus,
+.add-card-btn:hover {
+    outline: none;
+    box-shadow: 0 0 6px 3px rgba(255, 255, 255, 0.2);
+}
+
 
 /* styling of bottom section------------------------------------------*/
 
 .bottom {
-    height: 10%;
+    flex-grow: 1;
     display: flex;
     padding: 0 2em;
     justify-content: space-between;
@@ -201,4 +346,23 @@ main {
     fill: white;
     text-shadow: 0 0 10px black;
     cursor: pointer;
+}
+
+.setting:hover {
+    transform: scale(1.2);
+}
+
+@media (max-width: 1000px) {
+    .top {
+        flex-direction: column;
+        align-items: center;
+    }
+    .center {
+        flex-direction: column;
+        align-items: center;
+    }
+    .link-cards {
+        align-items: center;
+        justify-content: center;
+    }
 }

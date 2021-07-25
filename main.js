@@ -3,10 +3,17 @@ const weatherDisplay = document.querySelector('.weather')
 const timeDisplay = document.querySelector('.time')
 const coinCards = document.querySelector('.coin-cards')
 const addCard = document.querySelector('.add-card')
+const linkCards = document.querySelector('.link-cards')
+const addLinkBtn = document.querySelector('.add-link-btn')
 const addCardBtn = document.querySelector('.add-card-btn')
 const coinInput = document.querySelector('.coin-input')
+const addLink = document.querySelector('.add-link')
+const addBtn = document.querySelector('.add-btn')
+const linkTitleInput = document.querySelector('#link-title')
+const linkUrlInput = document.querySelector('#link-url')
+const cancel = document.querySelector('.cancel')
 
-// getting the backgroundImage from the Unsplash api
+// getting the backgroundImage from the Unsplash api-----------------------------------------------------------------------------------------------------------
 function background(filter) {
     fetch(`https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=${filter}`)
         .then(response => response.json())
@@ -48,7 +55,7 @@ navigator.geolocation.getCurrentPosition(
     },
     function() {}, { enableHighAccuracy: true });
 
-// displaying the current time using Date and methods
+// displaying the current time using Date and methods---------------------------------------------------------------------------------------------------------
 function currentTime() {
     let data = new Date()
     let formatedTime = data.toLocaleTimeString("en-us", { timeStyle: "short" })
@@ -57,7 +64,7 @@ function currentTime() {
 setInterval(currentTime, 1000)
 
 
-// adding the crypto card and accessing the crypto data using coingecko API
+// adding the crypto card and accessing the crypto data using coingecko API ----------------------------------------------------------------------------------
 
 
 // 1st check for the array of coin in local storage
@@ -84,7 +91,7 @@ function displayCards() {
             })
             .then(data => {
                 coinCards.innerHTML += `
-                    <div class="card","${element}">
+                    <div class="card">
                         <img src=${data.image.large} alt="" />
                         <div class="card-info">
                             <h3 class="coin-name">${data.name}</h3>
@@ -149,3 +156,88 @@ document.addEventListener('keyup', function(event) {
         addCoin()
     }
 })
+
+// moving forward to the links section where we are going to save some links as bookmark and display them on screen in cute little boxes-----------------------
+
+// 1st check for the array of links in local storage
+let linkArray = JSON.parse(localStorage.getItem("linkArray"))
+
+// if the link array exist then we proceed further but in case the array does not exist then create an empty array
+if (!linkArray) {
+    let emptyArray = []
+    localStorage.setItem("linkArray", JSON.stringify(emptyArray))
+}
+linkArray = JSON.parse(localStorage.getItem("linkArray"))
+
+// a function to display the content of the array
+function displayLinks() {
+    for (let element of linkArray) {
+        linkCards.innerHTML += `
+            <div class="link-card">
+                <a href="https://${element.url}"  target ="blank">
+                    <div class="link-box">
+                        <img src = "http://www.google.com/s2/favicons?domain=${element.url}"  alt = "">    
+                    </div>
+                </a>
+                <div class="link-info">${element.title}</div>
+                <div class="delete-link-btn">-</div>
+            </div>
+        `
+    }
+    if (linkArray.length > 5) {
+        addLinkBtn.style.display = "none"
+    } else {
+        addLinkBtn.style.display = "grid"
+    }
+}
+
+displayLinks()
+
+// now a function which will add the link in the linkArray and call the display function to show them
+function addLinktoArray() {
+    if (linkArray.length < 6) {
+        if (linkTitleInput.value && linkUrlInput.value) {
+            let object = {
+                title: linkTitleInput.value.toLowerCase(),
+                url: linkUrlInput.value.toLowerCase()
+            }
+            linkArray.push(object)
+            addLink.style.display = 'none'
+            linkTitleInput.value = ''
+            linkUrlInput.value = ''
+            console.log(linkArray)
+            localStorage.setItem("linkArray", JSON.stringify(linkArray))
+            linkCards.innerHTML = ''
+            displayLinks()
+            deleteLink()
+        }
+    }
+
+}
+addLinkBtn.addEventListener('click', () => {
+    addLink.style.display = 'flex'
+})
+cancel.addEventListener('click', () => {
+    addLink.style.display = 'none'
+})
+addBtn.addEventListener('click', addLinktoArray)
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        addLinktoArray()
+    }
+})
+
+// great now we will make the function to delete the links on the dispaly
+function deleteLink() {
+    let deleteLinkBtn = document.querySelectorAll('.delete-link-btn')
+    deleteLinkBtn.forEach(element => {
+        element.addEventListener('click', () => {
+            value = element.parentElement.children[1].textContent.toLowerCase()
+            linkArray = linkArray.filter(item => item.title !== value)
+            localStorage.setItem("linkArray", JSON.stringify(linkArray))
+            element.parentElement.remove()
+            addLinkBtn.style.display = "grid"
+        })
+    })
+}
+deleteLink()
