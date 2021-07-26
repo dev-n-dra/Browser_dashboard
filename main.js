@@ -1,6 +1,6 @@
 // javascript
 const weatherDisplay = document.querySelector('.weather')
-const timeDisplay = document.querySelector('.time')
+const time = document.querySelector('.time')
 const coinCards = document.querySelector('.coin-cards')
 const addCardContainer = document.querySelector('.add-card-container')
 const addCard = document.querySelector('.add-card')
@@ -13,22 +13,35 @@ const addBtn = document.querySelector('.add-btn')
 const linkTitleInput = document.querySelector('#link-title')
 const linkUrlInput = document.querySelector('#link-url')
 const cancel = document.querySelector('.cancel')
+const settingBtn = document.querySelector('.setting')
+const settingTab = document.querySelector('.setting-tab')
+const saveChange = document.querySelector('.save-change')
+const cancelChange = document.querySelector('.cancel-change')
+const filter = document.querySelector('#filter')
 
 // getting the backgroundImage from the Unsplash api-----------------------------------------------------------------------------------------------------------
+let bgFilter = JSON.parse(localStorage.getItem("bgFilter"))
+
+// if the bgFilter exist then we proceed further but in case the filter does not exist then create an filter
+if (!bgFilter) {
+    localStorage.setItem("bgFilter", JSON.stringify('Nature'))
+}
+bgFilter = JSON.parse(localStorage.getItem("bgFilter"))
+
 function background(filter) {
     fetch(`https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=${filter}`)
         .then(response => response.json())
         .then(data => {
             document.querySelector('body').style.backgroundImage = `url(${data.urls.regular})`
-            document.querySelector('.author').textContent = `By : ${data.user.name}`
+            document.querySelector('.author').textContent = `Background By : ${data.user.name}`
         })
         .catch(err => {
             // Use a default background image/author
             document.body.style.backgroundImage = `url("https://images.unsplash.com/photo-1597600159211-d6c104f408d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDI0NzB8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjcwNzQzODk&ixlib=rb-1.2.1&q=80&w=1080")`
-            document.querySelector(".author").textContent = `By: Michael Dziedzic`
+            document.querySelector(".author").textContent = `Background By: Michael Dziedzic`
         })
 }
-background('Nature')
+background(bgFilter)
 
 // getting the location using geolocation and then using the lat and long form that data to obtain the temperature of the current city using openWeatherMap API
 navigator.geolocation.getCurrentPosition(
@@ -60,7 +73,7 @@ navigator.geolocation.getCurrentPosition(
 function currentTime() {
     let data = new Date()
     let formatedTime = data.toLocaleTimeString("en-us", { timeStyle: "short" })
-    timeDisplay.textContent = formatedTime
+    time.textContent = formatedTime
 }
 setInterval(currentTime, 1000)
 
@@ -242,3 +255,28 @@ function deleteLink() {
     })
 }
 deleteLink()
+
+// ok the links section is completed and now moving forwards to the setting or we can say coustomization tab 
+
+settingBtn.addEventListener('click', () => {
+    settingTab.style.display = "flex"
+})
+cancelChange.addEventListener('click', () => {
+    settingTab.style.display = "none"
+})
+
+function saveSetting() {
+    if (filter.value) {
+        localStorage.setItem("bgFilter", JSON.stringify(filter.value))
+        bgFilter = JSON.parse(localStorage.getItem("bgFilter"))
+        filter.value = ''
+        background(bgFilter)
+    }
+    settingTab.style.display = "none"
+}
+saveChange.addEventListener('click', saveSetting)
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        saveSetting()
+    }
+})
