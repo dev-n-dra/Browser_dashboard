@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
     "name": "Personal Dashboard",
-    "version": "1.0.0",
-    "description": "It is a personal Browser Dashboard with the functionality of current weather, time, favourite links and crypto price tracker. You can also filter the background image. ",
+    "version": "0.0.1",
+    "description": "It is a personal Browser Dashboard with the functionality of current weather, time, favourite links and crypto price tracker. ",
     "action": {
-        "default_icon": "dashboard-icon.png"
+        "default_icon": "icon.png"
     },
     "chrome_url_overrides": {
         "newtab": "index.html"

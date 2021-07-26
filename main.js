@@ -24,7 +24,7 @@ let bgFilter = JSON.parse(localStorage.getItem("bgFilter"))
 
 // if the bgFilter exist then we proceed further but in case the filter does not exist then create an filter
 if (!bgFilter) {
-    localStorage.setItem("bgFilter", JSON.stringify('Nature'))
+    localStorage.setItem("bgFilter", JSON.stringify('Architecture'))
 }
 bgFilter = JSON.parse(localStorage.getItem("bgFilter"))
 
